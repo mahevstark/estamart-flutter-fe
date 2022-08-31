@@ -64,7 +64,8 @@ class BezierPainter extends CustomPainter {
 
       path = Path()
         ..moveTo(offset1.dx, offset1.dy)
-        ..quadraticBezierTo(size.width, size.height / 2, size.width + radius, radius)
+        ..quadraticBezierTo(
+            size.width, size.height / 2, size.width + radius, radius)
         ..quadraticBezierTo(size.width, size.height / 2, offset2.dx, offset2.dy)
         ..close();
 
@@ -74,7 +75,9 @@ class BezierPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(BezierPainter oldDelegate) {
-    return oldDelegate.color != color || oldDelegate.drawStart != drawStart || oldDelegate.drawEnd != drawEnd;
+    return oldDelegate.color != color ||
+        oldDelegate.drawStart != drawStart ||
+        oldDelegate.drawEnd != drawEnd;
   }
 
   Offset _offset(double radius, double angle) {
@@ -88,14 +91,17 @@ class BezierPainter extends CustomPainter {
 class MapScreen extends BaseRoute {
   final Order? order;
   final OrderController? orderController;
-  MapScreen(this.order, this.orderController, {a, o}) : super(a: a, o: o, r: 'MapScreen');
+  MapScreen(this.order, this.orderController, {a, o})
+      : super(a: a, o: o, r: 'MapScreen');
   @override
-  _MapScreenState createState() => new _MapScreenState(this.order, this.orderController);
+  _MapScreenState createState() =>
+      new _MapScreenState(this.order, this.orderController);
 }
 
 class _MapScreenState extends BaseRouteState {
   late GoogleMapController mapController;
-  CameraPosition _initialLocation = CameraPosition(target: LatLng(global.lat!, global.lng!));
+  CameraPosition _initialLocation =
+      CameraPosition(target: LatLng(global.lat!, global.lng!));
 
   Completer<GoogleMapController> _controller = Completer();
 
@@ -189,7 +195,10 @@ class _MapScreenState extends BaseRouteState {
                               margin: EdgeInsets.all(6),
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                                  colors: [
+                                    Theme.of(context).primaryColorLight,
+                                    Theme.of(context).primaryColor
+                                  ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
@@ -206,7 +215,10 @@ class _MapScreenState extends BaseRouteState {
                                   child: Text(
                                     "ETA: ${order!.estimatedTime}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w400),
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.w400),
                                   )),
                             )
                           : SizedBox()
@@ -245,11 +257,17 @@ class _MapScreenState extends BaseRouteState {
                       ),
                       builder: TimelineTileBuilder.connected(
                         connectionDirection: ConnectionDirection.before,
-                        itemExtentBuilder: (_, __) => MediaQuery.of(context).size.width / _processes.length,
+                        itemExtentBuilder: (_, __) =>
+                            MediaQuery.of(context).size.width /
+                            _processes.length,
                         contentsBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 5.0),
-                            child: Text(_processes[index]!, style: Theme.of(context).textTheme.bodyText1!.copyWith(color: getColor(index))),
+                            child: Text(_processes[index]!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(color: getColor(index))),
                           );
                         },
                         indicatorBuilder: (_, index) {
@@ -267,7 +285,8 @@ class _MapScreenState extends BaseRouteState {
                                     padding: const EdgeInsets.all(8.0),
                                     child: CircularProgressIndicator(
                                       strokeWidth: 1,
-                                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                                      valueColor:
+                                          AlwaysStoppedAnimation(Colors.white),
                                     ),
                                   );
                           } else if (index < _processIndex) {
@@ -322,16 +341,22 @@ class _MapScreenState extends BaseRouteState {
                             if (index == _processIndex) {
                               final prevColor = getColor(index - 1);
                               final color = getColor(index);
-                              List<Color?> gradientColors;
+                              List<Color> gradientColors;
                               if (type == ConnectorType.start) {
-                                gradientColors = [Color.lerp(prevColor, color, 0.5), color];
+                                gradientColors = [
+                                  Color.lerp(prevColor, color, 0.5)!,
+                                  color
+                                ];
                               } else {
-                                gradientColors = [prevColor, Color.lerp(prevColor, color, 0.5)];
+                                gradientColors = [
+                                  prevColor,
+                                  Color.lerp(prevColor, color, 0.5)!
+                                ];
                               }
                               return DecoratedLineConnector(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                    colors: gradientColors as List<Color>,
+                                    colors: gradientColors,
                                   ),
                                 ),
                               );
@@ -365,27 +390,35 @@ class _MapScreenState extends BaseRouteState {
                                   children: [
                                     IconButton(
                                         onPressed: () async {
-                                          await launchCaller(order!.deliveryBoyPhone);
+                                          await launchCaller(
+                                              order!.deliveryBoyPhone);
                                         },
-                                        icon: Icon(Icons.call, color: Theme.of(context).primaryColor)),
+                                        icon: Icon(Icons.call,
+                                            color: Theme.of(context)
+                                                .primaryColor)),
                                     IconButton(
                                       onPressed: () async {
                                         await textMe(order!.deliveryBoyPhone);
                                       },
-                                      icon: Icon(Icons.message_outlined, color: Theme.of(context).primaryColor),
+                                      icon: Icon(Icons.message_outlined,
+                                          color:
+                                              Theme.of(context).primaryColor),
                                     ),
                                   ],
                                 )
                               : null,
                         )
-                      : order!.orderStatus == 'Pending' || order!.orderStatus == 'Confirmed' || order!.orderStatus == 'Completed'
+                      : order!.orderStatus == 'Pending' ||
+                              order!.orderStatus == 'Confirmed' ||
+                              order!.orderStatus == 'Completed'
                           ? Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BottomButton(
                                 loadingState: false,
                                 disabledState: false,
                                 onPressed: () async {
-                                  if (order!.orderStatus == 'Pending' || order!.orderStatus == 'Confirmed') {
+                                  if (order!.orderStatus == 'Pending' ||
+                                      order!.orderStatus == 'Confirmed') {
                                     Get.to(() => CancelOrderScreen(
                                           a: widget.analytics,
                                           o: widget.observer,
@@ -397,17 +430,24 @@ class _MapScreenState extends BaseRouteState {
                                     await _reOrderItems();
                                   }
                                 },
-                                child: Text(order!.orderStatus == 'Pending' || order!.orderStatus == 'Confirmed' ? '${AppLocalizations.of(context)!.tle_cancel_order}' : '${AppLocalizations.of(context)!.btn_re_order}'),
+                                child: Text(order!.orderStatus == 'Pending' ||
+                                        order!.orderStatus == 'Confirmed'
+                                    ? '${AppLocalizations.of(context)!.tle_cancel_order}'
+                                    : '${AppLocalizations.of(context)!.btn_re_order}'),
                               ),
                             )
                           : Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                                 gradient: LinearGradient(
                                   stops: [0, .90],
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
-                                  colors: [Theme.of(context).primaryColorLight, Theme.of(context).primaryColor],
+                                  colors: [
+                                    Theme.of(context).primaryColorLight,
+                                    Theme.of(context).primaryColor
+                                  ],
                                 ),
                               ),
                               margin: EdgeInsets.all(8.0),
@@ -444,7 +484,8 @@ class _MapScreenState extends BaseRouteState {
   }
 
   Future<Uint8List> getMarker() async {
-    ByteData byteData = await DefaultAssetBundle.of(context).load("assets/images/scooter.png");
+    ByteData byteData =
+        await DefaultAssetBundle.of(context).load("assets/images/scooter.png");
     return byteData.buffer.asUint8List();
   }
 
@@ -501,7 +542,8 @@ class _MapScreenState extends BaseRouteState {
       double startLatitude = order!.storeLat!;
       double startLongitude = order!.storeLng!;
 
-      String destinationCoordinatesString = '(${order!.userLat}, ${order!.userLng})';
+      String destinationCoordinatesString =
+          '(${order!.userLat}, ${order!.userLng})';
       String startCoordinatesString = '($startLatitude, $startLongitude)';
 
       // Start - Store Location Marker
@@ -532,7 +574,8 @@ class _MapScreenState extends BaseRouteState {
         markers.add(
           Marker(
             markerId: MarkerId("home"),
-            position: LatLng(double.parse(order!.currentLat!), double.parse(order!.currentLng!)),
+            position: LatLng(double.parse(order!.currentLat!),
+                double.parse(order!.currentLng!)),
             draggable: false,
             zIndex: 2,
             flat: true,
@@ -547,17 +590,24 @@ class _MapScreenState extends BaseRouteState {
             circleId: CircleId("car"),
             zIndex: 1,
             strokeColor: Colors.blue,
-            center: LatLng(double.parse(order!.currentLat!), double.parse(order!.currentLng!)),
+            center: LatLng(double.parse(order!.currentLat!),
+                double.parse(order!.currentLng!)),
             fillColor: Colors.blue.withAlpha(70),
           ),
         );
       }
       markers.add(destinationMarker);
 
-      double miny = (order!.userLat! <= startLatitude) ? order!.userLat! : startLatitude;
-      double minx = (order!.userLng! <= startLongitude) ? order!.userLng! : startLongitude;
-      double maxy = (order!.userLat! <= startLatitude) ? startLatitude : order!.userLat!;
-      double maxx = (order!.userLng! <= startLongitude) ? startLongitude : order!.userLng!;
+      double miny =
+          (order!.userLat! <= startLatitude) ? order!.userLat! : startLatitude;
+      double minx = (order!.userLng! <= startLongitude)
+          ? order!.userLng!
+          : startLongitude;
+      double maxy =
+          (order!.userLat! <= startLatitude) ? startLatitude : order!.userLat!;
+      double maxx = (order!.userLng! <= startLongitude)
+          ? startLongitude
+          : order!.userLng!;
 
       double southWestLatitude = miny;
       double southWestLongitude = minx;
@@ -576,9 +626,12 @@ class _MapScreenState extends BaseRouteState {
       );
 
       try {
-        await _createPolylines(order!.userLat!, order!.userLng!, startLatitude, startLongitude);
+        await _createPolylines(
+            order!.userLat!, order!.userLng!, startLatitude, startLongitude);
       } catch (e) {
-        print("MAP Exeption - map_screen.dart - updateMarker() - _createPolylines" + e.toString());
+        print(
+            "MAP Exeption - map_screen.dart - updateMarker() - _createPolylines" +
+                e.toString());
       }
 
       return true;
@@ -588,7 +641,8 @@ class _MapScreenState extends BaseRouteState {
     return false;
   }
 
-  _createPolylines(double startLatitude, double startLongitude, double destinationLatitude, double destinationLongitude) async {
+  _createPolylines(double startLatitude, double startLongitude,
+      double destinationLatitude, double destinationLongitude) async {
     try {
       polylinePoints = PolylinePoints();
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -614,7 +668,8 @@ class _MapScreenState extends BaseRouteState {
       polylines[id] = polyline;
       setState(() {});
     } catch (e) {
-      print("MAP Exception - map_screen.dart - _createPolylines():" + e.toString());
+      print("MAP Exception - map_screen.dart - _createPolylines():" +
+          e.toString());
     }
   }
 
