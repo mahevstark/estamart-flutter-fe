@@ -522,7 +522,7 @@ class _CheckoutScreenState extends BaseRouteState {
   _makeOrder() async {
     try {
       if (_selectedAddress == null ||
-          (_selectedAddress != null && _selectedAddress!.addressId == null)) {
+          (_selectedAddress != null && _selectedAddress?.addressId == null)) {
         showToast(AppLocalizations.of(context)!.txt_select_deluvery_address);
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   backgroundColor: Theme
@@ -537,7 +537,7 @@ class _CheckoutScreenState extends BaseRouteState {
         //   duration: Duration(seconds: 2),
         // ));
       } else if (_selectedDate == null &&
-          _membershipStatus!.status != 'running') {
+          _membershipStatus?.status != 'running') {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   backgroundColor: Theme
         //       .of(context)
@@ -551,8 +551,8 @@ class _CheckoutScreenState extends BaseRouteState {
         //   duration: Duration(seconds: 2),
         // ));
         showToast(AppLocalizations.of(context)!.txt_select_date);
-      } else if (_selectedTimeSlot!.timeslot == null &&
-          _membershipStatus!.status != 'running') {
+      } else if (_selectedTimeSlot?.timeslot == null &&
+          _membershipStatus?.status != 'running') {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   backgroundColor: Theme
         //       .of(context)

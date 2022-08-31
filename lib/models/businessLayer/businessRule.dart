@@ -121,14 +121,21 @@ class BusinessRule {
       if (permissionStatus.isLimited || permissionStatus.isDenied) {
         permissionStatus = await Permission.camera.request();
       }
-      XFile _selectedImage = await (ImagePicker().pickImage(source: ImageSource.camera, maxHeight: 1200, maxWidth: 1200) as FutureOr<XFile>);
-      File imageFile = File(_selectedImage.path);
-      File _finalImage = await (_cropImage(imageFile.path) as FutureOr<File>);
+      XFile? _selectedImage = await ImagePicker().pickImage(source: ImageSource.camera, maxHeight: 1200, maxWidth: 1200);
+      if(_selectedImage != null) {
+        File imageFile = File(_selectedImage.path);
+        CroppedFile? _finalImage = await _cropImage(imageFile.path);
+        if(_finalImage != null) {
+          File? _compressedImage = await _imageCompress(_finalImage, imageFile.path);
 
-      _finalImage = await (_imageCompress(_finalImage, imageFile.path) as FutureOr<File>);
-
-      print("_byteData path ${_finalImage.path}");
-      return _finalImage;
+          print("_byteData path ${_compressedImage?.path}");
+          return _compressedImage;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
     } catch (e) {
       print("Exception - businessRule.dart - openCamera():" + e.toString());
     }
@@ -142,11 +149,19 @@ class BusinessRule {
         permissionStatus = await Permission.photos.request();
       }
       File imageFile;
-      XFile _selectedImage = await (ImagePicker().pickImage(source: ImageSource.gallery) as FutureOr<XFile>);
-      imageFile = File(_selectedImage.path);
-      File _byteData = await (_cropImage(imageFile.path) as FutureOr<File>);
-      _byteData = await (_imageCompress(_byteData, imageFile.path) as FutureOr<File>);
-      return _byteData;
+      XFile? _selectedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if(_selectedImage != null) {
+        imageFile = File(_selectedImage.path);
+        CroppedFile? _byteData = await _cropImage(imageFile.path);
+        if(_byteData != null) {
+          File? _compressedImage = await _imageCompress(_byteData, imageFile.path);
+          return _compressedImage;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
     } catch (e) {
       print("Exception - businessRule.dart - selectImageFromGallery()" + e.toString());
     }
@@ -174,9 +189,9 @@ class BusinessRule {
     }
   }
 
-  Future<File?> _cropImage(String sourcePath) async {
+  Future<CroppedFile?> _cropImage(String sourcePath) async {
     try {
-      File? _croppedFile = (await ImageCropper().cropImage(
+      CroppedFile? _croppedFile = await ImageCropper().cropImage(
         sourcePath: sourcePath,
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [
@@ -192,17 +207,16 @@ class BusinessRule {
             lockAspectRatio: true,
           ),
         ]
-      )) as File?;
-      if (_croppedFile != null) {
-        return _croppedFile;
-      }
+      );
+
+      return _croppedFile;
     } catch (e) {
       print("Exception - businessRule.dart - _cropImage():" + e.toString());
     }
     return null;
   }
 
-  Future<File?> _imageCompress(File file, String targetPath) async {
+  Future<File?> _imageCompress(CroppedFile file, String targetPath) async {
     try {
       var result = await FlutterImageCompress.compressAndGetFile(
         file.path,

@@ -495,7 +495,6 @@ class _PaymentGatewayScreenState extends BaseRouteState {
 
     options = {
       'key': global.paymentGateway!.razorpay!.razorpayKey,
-      'order_id': '$orderId',
       'amount': _amountInPaise(totalAmount!),
       'name': "${global.currentUser!.name}",
       'prefill': {'contact': global.currentUser!.userPhone, 'email': global.currentUser!.email},
@@ -631,7 +630,7 @@ class _PaymentGatewayScreenState extends BaseRouteState {
   String _amountInPaise(double amount) {
     try {
       double x = amount * 100;
-      return '${int.parse('$x')}';
+      return x.toString();
     } catch (e) {
       print("Exception - paymentGatewaysScreen.dart - _amountInPaise():" + e.toString());
       return '0';

@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "397591959748",
-    "project_id": "shopingp-107cf",
-    "storage_bucket": "shopingp-107cf.appspot.com"
+    "project_number": "199334770012",
+    "project_id": "estamart-eb0ce",
+    "storage_bucket": "estamart-eb0ce.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:397591959748:android:c44be700dd0ca591531191",
+        "mobilesdk_app_id": "1:199334770012:android:aaefb7b25e3273f904fd99",
         "android_client_info": {
           "package_name": "com.tech.groceryg"
         }
       },
       "oauth_client": [
         {
-          "client_id": "397591959748-h4mj463n5hcl4pmgccas7499tr84d3sl.apps.googleusercontent.com",
+          "client_id": "199334770012-g4lib39tllsgjecuua3riiahhabg4ul0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.tech.groceryg",
-            "certificate_hash": "d41e5b6e462ec3fe381cd196b400b0502bd37536"
+            "certificate_hash": "93cce66f164f7bffbe25fa44938aaaa9403707fa"
           }
         },
         {
-          "client_id": "397591959748-ffg7fppvbtlukiu1lt1ob6m77qahal6c.apps.googleusercontent.com",
+          "client_id": "199334770012-gii7r8u6lcr5nravs4hic5d6ounk047f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDzJVGzpgUDTPxCSCgYAdsL66JRAN3fBvg"
+          "current_key": "AIzaSyCYFKzFjIFUmDQwKaAmBeyV6BZcGsOlG1Y"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "397591959748-ffg7fppvbtlukiu1lt1ob6m77qahal6c.apps.googleusercontent.com",
+              "client_id": "199334770012-gii7r8u6lcr5nravs4hic5d6ounk047f.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
