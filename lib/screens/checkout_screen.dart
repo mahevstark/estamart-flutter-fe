@@ -6,7 +6,7 @@ import 'package:user/controllers/cart_controller.dart';
 import 'package:user/models/addressModel.dart';
 import 'package:user/models/businessLayer/baseRoute.dart';
 import 'package:user/models/businessLayer/global.dart' as global;
-import 'package:user/models/membershipStatusModel.dart';
+// import 'package:user/models/membershipStatusModel.dart';
 import 'package:user/models/orderModel.dart';
 import 'package:user/models/timeSlotModel.dart';
 import 'package:user/screens/add_address_screen.dart';
@@ -42,7 +42,7 @@ class _CheckoutScreenState extends BaseRouteState {
   ScrollController _scrollController = ScrollController();
   Order? orderDetails;
 
-  MembershipStatus? _membershipStatus = new MembershipStatus();
+  // MembershipStatus? _membershipStatus = new MembershipStatus();
 
   _CheckoutScreenState({this.cartController});
 
@@ -93,7 +93,9 @@ class _CheckoutScreenState extends BaseRouteState {
                   Container(
                     height: MediaQuery.of(context).size.height * 0.3,
                     width: MediaQuery.of(context).size.width,
-                    child: global.userProfileController.addressList?.isNotEmpty ?? false
+                    child: global.userProfileController.addressList
+                                ?.isNotEmpty ??
+                            false
                         ? ListView.builder(
                             shrinkWrap: true,
                             itemCount: global
@@ -158,87 +160,100 @@ class _CheckoutScreenState extends BaseRouteState {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 8, horizontal: 12.0),
-                    child: global.userProfileController.addressList?.isNotEmpty ?? false
-                        ? InkWell(
-                            onTap: () {
-                              Get.to(() => AddAddressScreen(
-                                        Address(),
-                                        a: widget.analytics,
-                                        o: widget.observer,
-                                        screenId: 0,
-                                      ))!
-                                  .then((value) {
-                                setState(() {});
-                              });
-                            },
-                            child: Text(
-                              "${AppLocalizations.of(context)!.tle_add_new_address} ",
-                              style: textTheme.subtitle1!.copyWith(
-                                fontSize: 14,
-                              ),
-                            ),
-                          )
-                        : SizedBox(),
+                    child:
+                        global.userProfileController.addressList?.isNotEmpty ??
+                                false
+                            ? InkWell(
+                                onTap: () {
+                                  Get.to(() => AddAddressScreen(
+                                            Address(),
+                                            a: widget.analytics,
+                                            o: widget.observer,
+                                            screenId: 0,
+                                          ))!
+                                      .then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                                child: Text(
+                                  "${AppLocalizations.of(context)!.tle_add_new_address} ",
+                                  style: textTheme.subtitle1!.copyWith(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
                   ),
                   _isClosingTime == false &&
                           global.nearStoreModel?.storeOpeningTime != null &&
-                      (global.nearStoreModel?.storeOpeningTime?.isNotEmpty ?? false) &&
+                          (global.nearStoreModel?.storeOpeningTime
+                                  ?.isNotEmpty ??
+                              false) &&
                           global.nearStoreModel!.storeClosingTime != null &&
-                      (global.nearStoreModel?.storeClosingTime?.isNotEmpty ?? false) &&
+                          (global.nearStoreModel?.storeClosingTime
+                                  ?.isNotEmpty ??
+                              false) &&
                           DateTime.now().isAfter(_openingTime) &&
                           DateTime.now().isBefore(
                               _closingTime.subtract(Duration(hours: 1)))
-                      ? SizedBox(
-                          height: 50,
-                          width: double.infinity,
-                          child: SwitchListTile(
-                            tileColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            value: _membershipStatus!.status == 'running'
-                                ? true
-                                : false,
-                            activeColor: Theme.of(context).primaryColorLight,
-                            onChanged: (val) async {
-                              if (_isClosingTime == false &&
-                                  global.nearStoreModel?.storeOpeningTime !=
-                                      null &&
-                                  (global.nearStoreModel?.storeOpeningTime?.isNotEmpty ?? false) &&
-                                  global.nearStoreModel?.storeClosingTime !=
-                                      null &&
-                                  global.nearStoreModel?.storeClosingTime !=
-                                      '' &&
-                                  DateTime.now().isAfter(_openingTime) &&
-                                  DateTime.now().isBefore(_closingTime
-                                      .subtract(Duration(hours: 1)))) {
-                                if (val) {
-                                  await _checkMembershipStatus();
-                                } else {
-                                  _membershipStatus!.status = 'Pending';
-                                  if (_scrollController.hasClients) {
-                                    Future.delayed(Duration(milliseconds: 50),
-                                        () {
-                                      _scrollController.jumpTo(_scrollController
-                                          .position.maxScrollExtent);
-                                    });
-                                  }
-                                }
-                              } else {
-                                _isClosingTime = true;
-                              }
+                      ? Container()
+                      // ? SizedBox(
+                      //     height: 50,
+                      //     width: double.infinity,
+                      //     child: SwitchListTile(
+                      //       tileColor: Theme.of(context).primaryColor,
+                      //       shape: RoundedRectangleBorder(
+                      //           borderRadius: BorderRadius.circular(10)),
+                      //       value:
+                      //           // _membershipStatus!.status == 'running'
+                      //           // ?
+                      //           true,
+                      //       // : false,
+                      //       activeColor: Theme.of(context).primaryColorLight,
+                      //       onChanged: (val) async {
+                      //         if (_isClosingTime == false &&
+                      //             global.nearStoreModel?.storeOpeningTime !=
+                      //                 null &&
+                      //             (global.nearStoreModel?.storeOpeningTime
+                      //                     ?.isNotEmpty ??
+                      //                 false) &&
+                      //             global.nearStoreModel?.storeClosingTime !=
+                      //                 null &&
+                      //             global.nearStoreModel?.storeClosingTime !=
+                      //                 '' &&
+                      //             DateTime.now().isAfter(_openingTime) &&
+                      //             DateTime.now().isBefore(_closingTime
+                      //                 .subtract(Duration(hours: 1)))) {
+                      //           if (val) {
+                      //             // await _checkMembershipStatus();
+                      //           } else {
+                      //             // _membershipStatus!.status = 'Pending';
+                      //             if (_scrollController.hasClients) {
+                      //               Future.delayed(Duration(milliseconds: 50),
+                      //                   () {
+                      //                 _scrollController.jumpTo(_scrollController
+                      //                     .position.maxScrollExtent);
+                      //               });
+                      //             }
+                      //           }
+                      //         } else {
+                      //           _isClosingTime = true;
+                      //         }
 
-                              setState(() {});
-                            },
-                            title: Text(
-                              _membershipStatus!.status == 'running'
-                                  ? '${AppLocalizations.of(context)!.btn_instant_delivery}'
-                                  : "${AppLocalizations.of(context)!.btn_req_instant_delivery}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .button?.copyWith(fontSize: 15),
-                            ),
-                          ),
-                        )
+                      //         setState(() {});
+                      //       },
+                      //       title: Text(
+                      //         // _membershipStatus!.status == 'running'
+                      //         // ?
+                      //         '${AppLocalizations.of(context)!.btn_instant_delivery}',
+                      //         // : "${AppLocalizations.of(context)!.btn_req_instant_delivery}",
+                      //         style: Theme.of(context)
+                      //             .textTheme
+                      //             .button
+                      //             ?.copyWith(fontSize: 15),
+                      //       ),
+                      //     ),
+                      //   )
                       : SizedBox(
                           height: 60,
                           width: double.infinity,
@@ -250,144 +265,129 @@ class _CheckoutScreenState extends BaseRouteState {
                                 child: Text(
                                     'Instant delivery not available as store closing time is near.'),
                               ))),
-                  _membershipStatus!.status != 'running'
-                      ? Padding(
-                          padding:
-                              const EdgeInsets.only(top: 24.0, bottom: 8.0),
-                          child: Text(
-                            "${AppLocalizations.of(context)!.txt_preferred_time}",
-                            style: subHeadingStyle,
-                          ),
-                        )
-                      : SizedBox(),
-                  _membershipStatus!.status != 'running'
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                                _selectedDate = await showDatePicker(
-                                  context: context,
-                                  firstDate:
-                                      DateTime.now().add(Duration(days: 1)),
-                                  initialDate:
-                                      DateTime.now().add(Duration(days: 1)),
-                                  lastDate:
-                                      DateTime.now().add(Duration(days: 10)),
-                                  initialDatePickerMode: DatePickerMode.day,
-                                  currentDate:
-                                      DateTime.now().add(Duration(days: 1)),
-                                  builder:
-                                      (BuildContext context, Widget? child) {
-                                    return Theme(
-                                      data: ThemeData(
-                                        primaryColor:
-                                            Theme.of(context).primaryColor,
-                                        colorScheme: ColorScheme.light(
-                                            primary:
-                                                Theme.of(context).primaryColor),
-                                        buttonTheme: ButtonThemeData(
-                                            textTheme: ButtonTextTheme.primary),
+                  // _membershipStatus!.status != 'running'
+                  // ?
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+                    child: Text(
+                      "${AppLocalizations.of(context)!.txt_preferred_time}",
+                      style: subHeadingStyle,
+                    ),
+                  ),
+                  // : SizedBox(),
+                  // _membershipStatus!.status != 'running'
+                  //     ?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          _selectedDate = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime.now(),
+                            initialDate: DateTime.now(),
+                            lastDate: DateTime.now().add(Duration(days: 10)),
+                            initialDatePickerMode: DatePickerMode.day,
+                            currentDate: DateTime.now(),
+                            builder: (BuildContext context, Widget? child) {
+                              return Theme(
+                                data: ThemeData(
+                                  primaryColor: Theme.of(context).primaryColor,
+                                  colorScheme: ColorScheme.light(
+                                      primary: Theme.of(context).primaryColor),
+                                  buttonTheme: ButtonThemeData(
+                                      textTheme: ButtonTextTheme.primary),
+                                ),
+                                child: child!,
+                              );
+                            },
+                          );
+                          if (_selectedDate != null) {
+                            await _getTimeSlotList();
+                          }
+                          setState(() {});
+                        },
+                        child: DateTimeSelector(
+                          key: UniqueKey(),
+                          heading: "${AppLocalizations.of(context)!.lbl_date} ",
+                          selectedDate: _selectedDate,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 80,
+                          color: Color(0xffF6F6F6),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  '${AppLocalizations.of(context)!.txt_time} ',
+                                  style: textTheme.caption,
+                                ),
+                                Spacer(),
+                                SizedBox(
+                                  height: 40,
+                                  child: Center(
+                                    child: DropdownButton(
+                                      value: _selectedTimeSlot,
+                                      isExpanded: false,
+                                      isDense: true,
+                                      icon: Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.black,
                                       ),
-                                      child: child!,
-                                    );
-                                  },
-                                );
-                                if (_selectedDate != null) {
-                                  await _getTimeSlotList();
-                                }
-                                setState(() {});
-                              },
-                              child: DateTimeSelector(
-                                key: UniqueKey(),
-                                heading:
-                                    "${AppLocalizations.of(context)!.lbl_date} ",
-                                selectedDate: _selectedDate,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 80,
-                                color: Color(0xffF6F6F6),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        '${AppLocalizations.of(context)!.txt_time} ',
-                                        style: textTheme.caption,
-                                      ),
-                                      Spacer(),
-                                      SizedBox(
-                                        height: 40,
-                                        child: Center(
-                                          child: DropdownButton(
-                                            value: _selectedTimeSlot,
-                                            isExpanded: false,
-                                            isDense: true,
-                                            icon: Icon(
-                                              Icons.keyboard_arrow_down,
-                                              color: Colors.black,
-                                            ),
-                                            underline: SizedBox(),
-                                            hint: Text(
-                                              '${AppLocalizations.of(context)!.lbl_select_time_slot} ',
-                                              style:
-                                                  textTheme.bodyText1!.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            items: _timeSlotList!.map<
-                                                    DropdownMenuItem<TimeSlot>>(
-                                                (TimeSlot timeSlot) {
-                                              return DropdownMenuItem<TimeSlot>(
-                                                value: timeSlot,
-                                                enabled:
-                                                    timeSlot.availibility ==
-                                                            "available"
-                                                        ? true
-                                                        : false,
-                                                child: Text(
-                                                  timeSlot.timeslot!,
-                                                  style: timeSlot
-                                                              .availibility ==
-                                                          "available"
-                                                      ? textTheme.bodyText1!
-                                                          .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        )
-                                                      : textTheme.bodyText1!
-                                                          .copyWith(
-                                                          color:
-                                                              Colors.grey[400],
-                                                        ),
-                                                ),
-                                              );
-                                            }).toList(),
-                                            onChanged: (dynamic value) {
-                                              setState(() {
-                                                _selectedTimeSlot = value;
-                                              });
-                                            },
-                                          ),
+                                      underline: SizedBox(),
+                                      hint: Text(
+                                        '${AppLocalizations.of(context)!.lbl_select_time_slot} ',
+                                        style: textTheme.bodyText1!.copyWith(
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ],
+                                      items: _timeSlotList!
+                                          .map<DropdownMenuItem<TimeSlot>>(
+                                              (TimeSlot timeSlot) {
+                                        return DropdownMenuItem<TimeSlot>(
+                                          value: timeSlot,
+                                          enabled: timeSlot.availibility ==
+                                                  "available"
+                                              ? true
+                                              : false,
+                                          child: Text(
+                                            timeSlot.timeslot!,
+                                            style: timeSlot.availibility ==
+                                                    "available"
+                                                ? textTheme.bodyText1!.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  )
+                                                : textTheme.bodyText1!.copyWith(
+                                                    color: Colors.grey[400],
+                                                  ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (dynamic value) {
+                                        setState(() {
+                                          _selectedTimeSlot = value;
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
-                        )
-                      : SizedBox(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                  // : SizedBox(),
                 ],
               ),
             ),
@@ -478,18 +478,18 @@ class _CheckoutScreenState extends BaseRouteState {
     }
   }
 
-  _checkMembershipStatus() async {
-    try {
-      _membershipStatus = await checkMemberShipStatus(_scaffoldKey);
-      if (_membershipStatus!.status == 'running') {
-      } else {
-        Get.to(() => MemberShipScreen(a: widget.analytics, o: widget.observer));
-      }
-    } catch (e) {
-      print("Exception - checkout_screen.dart - _checkMembershipStatus():" +
-          e.toString());
-    }
-  }
+  // _checkMembershipStatus() async {
+  //   try {
+  //     _membershipStatus = await checkMemberShipStatus(_scaffoldKey);
+  //     if (_membershipStatus!.status == 'running') {
+  //     } else {
+  //       Get.to(() => MemberShipScreen(a: widget.analytics, o: widget.observer));
+  //     }
+  //   } catch (e) {
+  //     print("Exception - checkout_screen.dart - _checkMembershipStatus():" +
+  //         e.toString());
+  //   }
+  // }
 
   _getTimeSlotList() async {
     try {
@@ -536,8 +536,10 @@ class _CheckoutScreenState extends BaseRouteState {
         //   ),
         //   duration: Duration(seconds: 2),
         // ));
-      } else if (_selectedDate == null &&
-          _membershipStatus?.status != 'running') {
+      } else if (_selectedDate == null
+          // &&
+          // _membershipStatus?.status != 'running'
+          ) {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   backgroundColor: Theme
         //       .of(context)
@@ -551,8 +553,10 @@ class _CheckoutScreenState extends BaseRouteState {
         //   duration: Duration(seconds: 2),
         // ));
         showToast(AppLocalizations.of(context)!.txt_select_date);
-      } else if (_selectedTimeSlot?.timeslot == null &&
-          _membershipStatus?.status != 'running') {
+      } else if (_selectedTimeSlot?.timeslot == null
+          // &&
+          // _membershipStatus?.status != 'running'
+          ) {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   backgroundColor: Theme
         //       .of(context)
@@ -574,9 +578,11 @@ class _CheckoutScreenState extends BaseRouteState {
           await apiHelper
               .makeOrder(
                   selectedDate: _selectedDate,
-                  selectedTime: _membershipStatus!.status == 'running'
-                      ? 'instant'
-                      : _selectedTimeSlot!.timeslot)
+                  selectedTime:
+                      // _membershipStatus!.status == 'running'
+                      //     ?
+                      // 'instant'
+                      _selectedTimeSlot!.timeslot)
               .then((result) async {
             if (result != null) {
               if (result.status == "1") {
